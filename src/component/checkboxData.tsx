@@ -1,14 +1,14 @@
 export const checkboxData = [
     {
-        text: "Una página web (500€)",
+        text: "Una página web ",
         price: 500,
     },
     {
-        text: "Una campaña SEO (300€)",
+        text: "Una campaña SEO ",
         price: 300,
     },
     {
-        text: "Una campaña de publicidad (200€)",
+        text: "Una campaña de publicidad ",
         price: 200,
     },
 ];
