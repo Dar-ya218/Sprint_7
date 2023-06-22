@@ -46,6 +46,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  color: #f9f9f9;
 }
 button:hover {
   border-color: #646cff;
@@ -65,7 +66,7 @@ button:focus-visible {
 
 .imputNum{
   margin-left: 2px;
-  
+  width: min-content;
 }
 
 .custom-input {
@@ -74,6 +75,7 @@ button:focus-visible {
 }
 .rowOne{
   flex-direction: row;
+  display: flex;
 }
 
 .custom-input button {

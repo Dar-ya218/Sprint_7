@@ -6,13 +6,11 @@ import { FiPlus, FiMinus } from "react-icons/fi";
 function CustomInput({ value, onIncrement, onDecrement, onChange }) {
     return (
         <div className="custom-input">
-            <button onClick={onDecrement}
-            >
+            <button onClick={onDecrement}>
                 <FiMinus />
             </button>
             <input type="number" value={value} onChange={onChange} />
-            <button onClick={onIncrement}
-            >
+            <button onClick={onIncrement}>
                 <FiPlus />
             </button>
         </div>
@@ -28,6 +26,32 @@ function App() {
     const [numLanguages, setNumLanguages] = useState(1);
 
     useEffect(() => {
+      // Cargar los datos del localStorage cuando se inicialice el componente
+      const savedCheckboxState = window.localStorage.getItem("checkboxState");
+      const savedNumPages = window.localStorage.getItem("numPages");
+      const savedNumLanguages = window.localStorage.getItem("numLanguages");
+  
+      if (savedCheckboxState !== null) {
+        setCheckboxState(JSON.parse(savedCheckboxState));
+      }
+  
+      if (savedNumPages !== null) {
+        setNumPages(parseInt(savedNumPages));
+      }
+  
+      if (savedNumLanguages !== null) {
+        setNumLanguages(parseInt(savedNumLanguages));
+      }
+    }, []);
+
+    useEffect(() => {
+      // Guardar los datos actualizados en el localStorage cada vez que haya cambios
+    window.localStorage.setItem("checkboxState", JSON.stringify(checkboxState)); //lo convierte en string
+    localStorage.setItem("numPages", JSON.stringify(numPages));
+    localStorage.setItem("numLanguages", JSON.stringify(numLanguages));
+    console.log(localStorage.getItem('numPages'));
+    console.log(localStorage.getItem('numLanguages'));
+
         calculateTotal();
     }, [checkboxState, numPages, numLanguages]);
 
@@ -60,6 +84,7 @@ function App() {
 
         // Actualizamos el estado de los checkboxes
         setCheckboxState(newState);
+
         // Calculamos el nuevo total
         calculateTotal();
     };
@@ -95,7 +120,7 @@ function App() {
 
                         {index === 0 && checkboxState[index] && (
                             <div className="inputDiv">
-                                <p className="rowOne">
+                                <div className="rowOne">
                                     <label htmlFor={`webPages_${index}`}>
                                         Número de páginas:
                                     </label>
@@ -111,8 +136,8 @@ function App() {
                                             handleNumPagesChange(e.target.value)
                                         }
                                     />
-                                </p>
-                                <p>
+                                </div>
+                                <div className="rowOne">
                                     <label htmlFor={`webLanguages_${index}`}>
                                         Número de idiomas:
                                     </label>
@@ -134,7 +159,7 @@ function App() {
                                             )
                                         }
                                     />
-                                </p>
+                                </div>
                             </div>
                         )}
                     </div>
