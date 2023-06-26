@@ -1,7 +1,12 @@
 import "./App.css";
 import { checkboxData } from "./component/checkboxData";
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import { FiPlus, FiMinus } from "react-icons/fi";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import WelcomeScreen from './component/WelcomeScreen';
+
+
+
 
 function CustomInput({ value, onIncrement, onDecrement, onChange }) {
     return (
@@ -9,12 +14,21 @@ function CustomInput({ value, onIncrement, onDecrement, onChange }) {
             <button onClick={onDecrement}>
                 <FiMinus />
             </button>
-            <input type="number" value={value} onChange={onChange} />
+            <input type="text" value={value} onChange={onChange} />
             <button onClick={onIncrement}>
                 <FiPlus />
             </button>
         </div>
     );
+}
+
+function MainScreen() {
+  return (
+    <div>
+      <h1>Pantalla principal</h1>
+      {/* Contenido de la pantalla principal */}
+    </div>
+  );
 }
 
 function App() {
@@ -25,82 +39,89 @@ function App() {
     const [numPages, setNumPages] = useState(1);
     const [numLanguages, setNumLanguages] = useState(1);
 
+    
+    
+    const calculateTotal = () => {
+      // Calculamos el total sumando los precios de los elementos seleccionados
+      let totalPrice = checkboxState.reduce((sum, currentState, index) => {
+        if (currentState) {
+          return sum + checkboxData[index].price;
+        }
+        return sum;
+      }, 0);
+      
+      // Si la primera opción está seleccionada, agregamos el costo adicional por páginas e idiomas
+      if (checkboxState[0]) {
+        totalPrice += numPages * numLanguages * 30;
+      }
+      
+      // Actualizamos el estado total
+      setTotal(totalPrice);
+    };
+    
+    const changeState = (index: number) => {
+      // Creamos un nuevo estado basado en el estado actual
+      const newState = checkboxState.map((estado, i) => {
+        if (index === i) {
+          estado = !estado;
+        }
+        return estado;
+      });
+      
+      // Actualizamos el estado de los checkboxes
+      setCheckboxState(newState);
+      
+      // Calculamos el nuevo total
+      calculateTotal();
+    };
+    
+    //Definir las funciones handleWebPagesChange y handleWebLanguagesChange para manejar los cambios en los inputs de páginas e idiomas:
+    const handleNumPagesChange = (value: number) => {
+      setNumPages(value);
+      calculateTotal();
+    };
+    
+    const handleNumLanguagesChange = (value: number) => {
+      setNumLanguages(value);
+      calculateTotal();
+    };
+    
+    
     useEffect(() => {
       // Cargar los datos del localStorage cuando se inicialice el componente
       const savedCheckboxState = window.localStorage.getItem("checkboxState");
       const savedNumPages = window.localStorage.getItem("numPages");
       const savedNumLanguages = window.localStorage.getItem("numLanguages");
-  
+      
       if (savedCheckboxState !== null) {
         setCheckboxState(JSON.parse(savedCheckboxState));
       }
-  
+      
       if (savedNumPages !== null) {
-        setNumPages(parseInt(savedNumPages));
+        setNumPages(JSON.parse(savedNumPages));
       }
-  
+      
       if (savedNumLanguages !== null) {
-        setNumLanguages(parseInt(savedNumLanguages));
+        setNumLanguages(JSON.parse(savedNumLanguages));
       }
     }, []);
 
     useEffect(() => {
       // Guardar los datos actualizados en el localStorage cada vez que haya cambios
-    window.localStorage.setItem("checkboxState", JSON.stringify(checkboxState)); //lo convierte en string
-    localStorage.setItem("numPages", JSON.stringify(numPages));
-    localStorage.setItem("numLanguages", JSON.stringify(numLanguages));
-    console.log(localStorage.getItem('numPages'));
-    console.log(localStorage.getItem('numLanguages'));
-
-        calculateTotal();
-    }, [checkboxState, numPages, numLanguages]);
-
-    const calculateTotal = () => {
-        // Calculamos el total sumando los precios de los elementos seleccionados
-        let totalPrice = checkboxState.reduce((sum, currentState, index) => {
-            if (currentState) {
-                return sum + checkboxData[index].price;
-            }
-            return sum;
-        }, 0);
-
-        // Si la primera opción está seleccionada, agregamos el costo adicional por páginas e idiomas
-        if (checkboxState[0]) {
-            totalPrice += numPages * numLanguages * 30;
-        }
-
-        // Actualizamos el estado total
-        setTotal(totalPrice);
-    };
-
-    const changeState = (index: number) => {
-        // Creamos un nuevo estado basado en el estado actual
-        const newState = checkboxState.map((estado, i) => {
-            if (index === i) {
-                estado = !estado;
-            }
-            return estado;
-        });
-
-        // Actualizamos el estado de los checkboxes
-        setCheckboxState(newState);
-
-        // Calculamos el nuevo total
-        calculateTotal();
-    };
-
-    //Definir las funciones handleWebPagesChange y handleWebLanguagesChange para manejar los cambios en los inputs de páginas e idiomas:
-    const handleNumPagesChange = (value: SetStateAction<number>) => {
-        setNumPages(value);
-        calculateTotal();
-    };
-
-    const handleNumLanguagesChange = (value: SetStateAction<number>) => {
-        setNumLanguages(value);
-        calculateTotal();
-    };
+      window.localStorage.setItem("numPages", JSON.stringify(numPages));
+      window.localStorage.setItem("numLanguages", JSON.stringify(numLanguages));
+      window.localStorage.setItem("checkboxState", JSON.stringify(checkboxState)); //lo convierte en string
+      console.log(localStorage.getItem('numPages'));
+      console.log(localStorage.getItem('numLanguages'));
+      
+      calculateTotal();
+    }, [ numPages, numLanguages, checkboxState]);
     return (
-        <>
+        <Router>
+         <Routes>
+          <Route exact path="/" component={WelcomeScreen} />
+          <Route path="/main" component={MainScreen} />
+         </Routes>
             <h4>¿Que quiere hacer?</h4>
             {/* Iteramos sobre los datos de checkbox y renderizamos los elementos */}
             {checkboxData.map(({ text, price }, index) => {
@@ -129,9 +150,13 @@ function App() {
                                         onIncrement={() =>
                                             handleNumPagesChange(numPages + 1)
                                         }
-                                        onDecrement={() =>
-                                            handleNumPagesChange(numPages - 1)
+                                        onDecrement={() =>{
+                                          if (numPages === 1) {
+                                            setNumPages(numPages)
+                                         } else {handleNumPagesChange(numPages - 1) }
                                         }
+                                        }
+                                        
                                         onChange={(e: { target: { value: any; }; }) =>
                                             handleNumPagesChange(e.target.value)
                                         }
@@ -148,10 +173,11 @@ function App() {
                                                 numLanguages + 1
                                             )
                                         }
-                                        onDecrement={() =>
-                                            handleNumLanguagesChange(
-                                                numLanguages - 1
-                                            )
+                                        onDecrement={() =>{
+                                          if(numLanguages===1){
+                                            setNumLanguages(numLanguages)
+                                          } else{handleNumLanguagesChange(numLanguages - 1)}
+                                        }   
                                         }
                                         onChange={(e: { target: { value: any; }; }) =>
                                             handleNumLanguagesChange(
@@ -166,7 +192,7 @@ function App() {
                 );
             })}
             <p>Total: {total}</p>
-        </>
+        </Router>
     );
 }
 export default App;
