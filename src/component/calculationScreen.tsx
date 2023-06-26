@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiPlus, FiMinus } from 'react-icons/fi';
+import HelpButton from './helpbutton.';
 
 function CustomInput({ value, onIncrement, onDecrement, onChange }) {
   return (
@@ -111,6 +112,7 @@ function CalculationScreen() {
       {checkboxData.map(({ text, price }, index) => (
         <div key={index}>
           <p>
+          <HelpButton numPages={numPages} />
             <input
               type="checkbox"
               id={`checkbox_${index}`}
@@ -136,6 +138,7 @@ function CalculationScreen() {
                   }
                   onChange={(e) => handleNumPagesChange(e.target.value)}
                 />
+                 <HelpButton numPages={numPages} />
               </div>
               <div className="rowOne">
                 <label htmlFor={`webLanguages_${index}`}>
@@ -151,12 +154,14 @@ function CalculationScreen() {
                   }
                   onChange={(e) => handleNumLanguagesChange(e.target.value)}
                 />
+                  <HelpButton numPages={numPages} />
               </div>
             </div>
           )}
         </div>
       ))}
       <p>Total: {total}</p>
+      <HelpButton numPages={numPages} />
     </div>
   );
 }
