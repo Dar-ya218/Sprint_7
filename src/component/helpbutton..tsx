@@ -1,26 +1,40 @@
 import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import { FaInfoCircle } from 'react-icons/fa';
 
-function HelpButton({ numPages }) {
+function HelpButton({ numPages, numLanguages }) {
     const [showPopup, setShowPopup] = useState(false);
 
     return (
         <div>
-            <button onClick={() => setShowPopup(true)}>
-                <i className="fa fa-info-circle"></i>
+            <button 
+            className="popup-button"
+            onClick={() => setShowPopup(true)}>
+            <FaInfoCircle /> {/* Icono de información */}
             </button>
-            <Popup open={showPopup} onClose={() => setShowPopup(false)}>
+            <Popup
+            className="popup-mesage"
+            open={showPopup} onClose={() => setShowPopup(false)}
+           >
                 <div>
-                    <h3>Información del servicio</h3>
-                    <p>
-                        En este componente debe indicar el numero de paginas que
-                        tendra su sitio web.
-                    </p>
-                    <p>Número de páginas seleccionadas: {numPages}</p>
-                </div>
-            </Popup>
+                {numPages && (
+            <div>
+              <h3>Información del servicio (Número de páginas)</h3>
+              <p>En este componente debe indicar el número de páginas que tendrá su sitio web</p>
+              <p>Número de páginas seleccionadas: {numPages}</p>
+            </div>
+          )}
+          {numLanguages && (
+            <div>
+              <h3>Información del servicio (Número de idiomas)</h3>
+              <p>En este componente debe indicar el número de idiomas que tendrá su sitio web</p>
+              <p>Número de idiomas seleccionados: {numLanguages}</p>
+            </div>
+          )}
         </div>
-    );
+      </Popup>
+    </div>
+  );
 }
 export default HelpButton;

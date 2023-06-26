@@ -112,7 +112,6 @@ function CalculationScreen() {
       {checkboxData.map(({ text, price }, index) => (
         <div key={index}>
           <p>
-          <HelpButton numPages={numPages} />
             <input
               type="checkbox"
               id={`checkbox_${index}`}
@@ -161,7 +160,6 @@ function CalculationScreen() {
         </div>
       ))}
       <p>Total: {total}</p>
-      <HelpButton numPages={numPages} />
     </div>
   );
 }

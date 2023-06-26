@@ -87,6 +87,32 @@ button:focus-visible {
   background-color: rgba(255, 72, 0, 0.947);
 }
 
+.popup-button {
+  background-color: #72737d;/* Color de fondo*/
+  border: none;
+  border-radius: 50%; /* Hace que el botón sea redondo */
+  padding: 5px;
+  cursor: pointer;
+}
+
+.popup-icon {
+  color: white; /* Color del icono*/
+  font-size: 16px;
+}
+
+.popup-mesage{
+  background: rgb(223, 219, 219);
+  padding: 20px;
+  border: 3px solid black;
+  width: 300px;
+}
+
+.popup-container {
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+
 .custom-input input {
   width: 4rem;
   text-align: center;
