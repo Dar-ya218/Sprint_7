@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiPlus, FiMinus } from 'react-icons/fi';
-import HelpButton from './helpbutton.';
+import HelpButton from '../component/helpbutton.';
 
 function CustomInput({ value, onIncrement, onDecrement, onChange }) {
   return (
@@ -153,7 +153,7 @@ function CalculationScreen() {
                   }
                   onChange={(e) => handleNumLanguagesChange(e.target.value)}
                 />
-                  <HelpButton numPages={numPages} />
+                  <HelpButton numLanguages={numLanguages} />
               </div>
             </div>
           )}
