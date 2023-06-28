@@ -10,9 +10,7 @@ function HelpButton({ numPages, numLanguages }) {
       if (numPages !== undefined) {
         return (
           <div>
-            <h3>Información del número de páginas</h3>
             <p>En este componente debe indicar el número de páginas que tendrá su sitio web</p>
-            <p>Número de páginas seleccionadas: {numPages}</p>
           </div>
         );
       }
@@ -20,9 +18,7 @@ function HelpButton({ numPages, numLanguages }) {
       if (numLanguages !== undefined) {
         return (
           <div>
-            <h3>Información del número de idiomas</h3>
             <p>En este componente debe indicar el número de idiomas que tendrá su sitio web</p>
-            <p>Número de idiomas seleccionados: {numLanguages}</p>
           </div>
         );
       }
