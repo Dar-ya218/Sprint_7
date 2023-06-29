@@ -141,7 +141,7 @@ function CalculationScreen() {
                                     onDecrement={decreasePages}
                                     onChange={handleNumPagesChange}
                                 />
-                                <HelpButton numPages={numPages} numLanguages={undefined} />
+                                <HelpButton numPagesPopup={true} numLanguagesPopup={false} />
                             </div>
                             <div className="rowOne">
                                 <label htmlFor={`webLanguages_${index}`}>
@@ -153,7 +153,7 @@ function CalculationScreen() {
                                     onDecrement={decreaseLanguages}
                                     onChange={handleNumLanguagesChange}
                                 />
-                                <HelpButton numLanguages={numLanguages} />
+                                <HelpButton numLanguagesPopup={true} numPagesPopup={false}/>
                             </div>
                         </div>
                     )}

@@ -46,7 +46,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-  color: #621b1b;
+  color: #ebe4e4;
 }
 button:hover {
   border-color: #646cff;
@@ -88,11 +88,12 @@ button:focus-visible {
 }
 
 .popup-button {
-  background-color: #72737d;/* Color de fondo*/
+  background-color: none;/* Color de fondo*/
   border: none;
   border-radius: 50%; /* Hace que el botón sea redondo */
   padding: 5px;
   cursor: pointer;
+  color: grey;
 }
 
 .popup-icon {

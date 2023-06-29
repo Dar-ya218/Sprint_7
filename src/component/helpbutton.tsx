@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { FaInfoCircle } from 'react-icons/fa';
 
-function HelpButton({ numPages, numLanguages }) {
+interface Props{
+  numPagesPopup: boolean
+  numLanguagesPopup: boolean
+}
+
+const HelpButton:FC<Props>=({ numPagesPopup, numLanguagesPopup })=> {
     const [showPopup, setShowPopup] = useState(false);
   
     const getMessage = () => {
-      if (numPages !== undefined) {
+      if (numPagesPopup === true) {
         return (
           <div>
             <p>En este componente debe indicar el número de páginas que tendrá su sitio web</p>
@@ -15,7 +20,7 @@ function HelpButton({ numPages, numLanguages }) {
         );
       }
   
-      if (numLanguages !== undefined) {
+      if (numLanguagesPopup === true) {
         return (
           <div>
             <p>En este componente debe indicar el número de idiomas que tendrá su sitio web</p>
