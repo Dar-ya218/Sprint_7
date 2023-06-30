@@ -19,8 +19,11 @@ interface Budget {
     const [nombrePresupuesto, setNombrePresupuesto] = useState('');
     const [nombreCliente, setNombreCliente] = useState('');
     const [savedBudgets, setSavedBudgets] = useState<Budget[]>([]);
+    const [isSortedAlphabetically, setIsSortedAlphabetically] = useState(false);
+    const [isSortedByDate, setIsSortedByDate] = useState(false);
+
   
-    function clearCheckboxes(){
+    const clearCheckboxes =()=>{
       window.localStorage.setItem("checkboxState",JSON.stringify([false, false, false]));
       window.localStorage.setItem("numPages", JSON.stringify(1));
       window.localStorage.setItem("numLanguages",JSON.stringify(1));
@@ -42,7 +45,22 @@ interface Budget {
       clearCheckboxes();
     };
     
-  
+   
+  const handleSortAlphabetically = () => {
+    setIsSortedAlphabetically(!isSortedAlphabetically);
+    setIsSortedByDate(false);
+  };
+
+  const handleSortByDate = () => {
+    setIsSortedByDate(!isSortedByDate);
+    setIsSortedAlphabetically(false);
+  };
+
+  const handleResetSort = () => {
+    setIsSortedAlphabetically(false);
+    setIsSortedByDate(false);
+  };
+
     return (
       <div>
         <div>
@@ -72,8 +90,27 @@ interface Budget {
         </div>
         <div>
           <h2>Presupuestos guardados:</h2>
+          <div>
+          <button onClick={handleSortAlphabetically}>
+            {isSortedAlphabetically ? 'Desactivar orden alfabético' : 'Ordenar alfabéticamente'}
+          </button>
+          <button onClick={handleSortByDate}>
+            {isSortedByDate ? 'Desactivar orden por fecha' : 'Ordenar por fecha'}
+          </button>
+          <button onClick={handleResetSort}>Reinicializar el orden</button>
+        </div>
           <ul>
-            {savedBudgets.map((budget, index) => (
+          {savedBudgets
+            .sort((a, b) => {
+              if (isSortedAlphabetically) {
+                return a.name.localeCompare(b.name);
+              }
+              if (isSortedByDate) {
+                return a.date.getTime() - b.date.getTime();
+              }
+              return 0;
+            })
+            .map((budget, index) => (
               <li key={index}>
                 <strong>Nombre:</strong> {budget.name}
                 <br />
