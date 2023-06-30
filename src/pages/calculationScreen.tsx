@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import HelpButton from "../component/helpbutton";
 import CustomInput from "../component/customInput";
 import { Link } from "react-router-dom";
+import SaveBudget from "./saveBudget";
+
 
 function CalculationScreen() {
     const checkboxData = [
@@ -160,10 +162,7 @@ function CalculationScreen() {
                 </div>
             ))}
             <p>Total: {total}</p>
-            <div><button>
-              <Link to='/saveBudget'>Guardar</Link>
-              </button>
-              </div>
+              <SaveBudget checkboxState={checkboxState} total={total} />
         </div>
     );
 }
