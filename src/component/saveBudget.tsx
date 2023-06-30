@@ -21,6 +21,9 @@ interface Budget {
     const [savedBudgets, setSavedBudgets] = useState<Budget[]>([]);
     const [isSortedAlphabetically, setIsSortedAlphabetically] = useState(false);
     const [isSortedByDate, setIsSortedByDate] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredBudgets, setFilteredBudgets] = useState<Budget[]>([]);
+
 
   
     const clearCheckboxes =()=>{
@@ -46,20 +49,37 @@ interface Budget {
     };
     
    
-  const handleSortAlphabetically = () => {
-    setIsSortedAlphabetically(!isSortedAlphabetically);
-    setIsSortedByDate(false);
-  };
+    const handleSortAlphabetically = () => {
+      const sorted = [...savedBudgets].sort((a, b) => a.name.localeCompare(b.name));
+      setSavedBudgets(sorted);
+      setIsSortedAlphabetically(!isSortedAlphabetically);
+      setIsSortedByDate(false);
+    };
+    
 
-  const handleSortByDate = () => {
-    setIsSortedByDate(!isSortedByDate);
-    setIsSortedAlphabetically(false);
-  };
+    const handleSortByDate = () => {
+      const sorted = [...savedBudgets].sort((a, b) => a.date.getTime() - b.date.getTime());
+      setSavedBudgets(sorted);
+      setIsSortedByDate(!isSortedByDate);
+      setIsSortedAlphabetically(false);
+    };
+    
 
   const handleResetSort = () => {
     setIsSortedAlphabetically(false);
     setIsSortedByDate(false);
   };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+  
+    const filtered = savedBudgets.filter((budget) =>
+      budget.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredBudgets(filtered);
+  };
+  
 
     return (
       <div>
@@ -91,6 +111,12 @@ interface Budget {
         <div>
           <h2>Presupuestos guardados:</h2>
           <div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Buscar presupuestos"
+          />
           <button onClick={handleSortAlphabetically}>
             {isSortedAlphabetically ? 'Desactivar orden alfabético' : 'Ordenar alfabéticamente'}
           </button>
@@ -100,29 +126,38 @@ interface Budget {
           <button onClick={handleResetSort}>Reinicializar el orden</button>
         </div>
           <ul>
-          {savedBudgets
-            .sort((a, b) => {
-              if (isSortedAlphabetically) {
-                return a.name.localeCompare(b.name);
-              }
-              if (isSortedByDate) {
-                return a.date.getTime() - b.date.getTime();
-              }
-              return 0;
-            })
-            .map((budget, index) => (
-              <li key={index}>
-                <strong>Nombre:</strong> {budget.name}
-                <br />
-                <strong>Cliente:</strong> {budget.client}
-                <br />
-                <strong>Servicio:</strong> {budget.service}
-                <br />
-                <strong>Total:</strong> {budget.total}
-                <br />
-                <strong>Fecha:</strong> {budget.date.toString()}
-              </li>
-            ))}
+          <ul>
+  {searchQuery === '' ? (
+    savedBudgets.map((budget, index) => (
+      <li key={index}>
+        <strong>Nombre:</strong> {budget.name}
+        <br />
+        <strong>Cliente:</strong> {budget.client}
+        <br />
+        <strong>Servicio:</strong> {budget.service}
+        <br />
+        <strong>Total:</strong> {budget.total}
+        <br />
+        <strong>Fecha:</strong> {budget.date.toString()}
+      </li>
+    ))
+  ) : (
+    filteredBudgets.map((budget, index) => (
+      <li key={index}>
+        <strong>Nombre:</strong> {budget.name}
+        <br />
+        <strong>Cliente:</strong> {budget.client}
+        <br />
+        <strong>Servicio:</strong> {budget.service}
+        <br />
+        <strong>Total:</strong> {budget.total}
+        <br />
+        <strong>Fecha:</strong> {budget.date.toString()}
+      </li>
+    ))
+  )}
+</ul>
+
           </ul>
         </div>
       </div>
