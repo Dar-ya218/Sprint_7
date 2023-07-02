@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSaveBudgetLogic } from './saveBudgetLogic';
+import localStorage from 'localStorage';
 
 interface SaveBudgetProps {
   checkboxState: boolean[];

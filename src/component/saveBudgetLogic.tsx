@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { saveDataToLocalStorage, getDataFromLocalStorage } from './LocalStorageUtils';
 
 // Definimos la interfaz Budget para representar un objeto de presupuesto.
 interface Budget {
@@ -51,12 +52,26 @@ export const useSaveBudgetLogic = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredBudgets, setFilteredBudgets] = useState<Budget[]>([]);
 
+  useEffect(() => {
+    // Cargar los presupuestos guardados al cargar el componente
+    const savedBudgetsFromLocalStorage = getDataFromLocalStorage();
+    setSavedBudgets(savedBudgetsFromLocalStorage);
+  }, []);
+
+  useEffect(() => {
+    // Guardar los presupuestos en el localStorage cuando cambie el estado de savedBudgets
+    saveDataToLocalStorage(savedBudgets);
+  }, [savedBudgets]);
+
    // Función para limpiar los valores de los checkboxes
-  const clearCheckboxes = () => {
-    window.localStorage.setItem('checkboxState', JSON.stringify([false, false, false]));
-    window.localStorage.setItem('numPages', JSON.stringify(1));
-    window.localStorage.setItem('numLanguages', JSON.stringify(1));
+   const clearCheckboxes = () => {
+    const checkboxState = [false, false, false];
+    const numPages = 1;
+    const numLanguages = 1;
+  
+    saveDataToLocalStorage({ checkboxState, numPages, numLanguages });
   };
+  
 
   // Función para manejar el evento de guardar el presupuesto.
   const handleSaveBudget = () => {
@@ -68,7 +83,8 @@ export const useSaveBudgetLogic = ({
       date: new Date(),
     };
 
-    setSavedBudgets([...savedBudgets, newBudget]);
+    const updatedBudgets = [...savedBudgets, newBudget];
+    setSavedBudgets(updatedBudgets);
 
     setNombrePresupuesto('');
     setNombreCliente('');
